@@ -6,10 +6,6 @@ struct Int {
     int rank;
     Int *left;
     Int *right;
-    /**************************************************************************
-     ****** can't put rank at the end *****************************************
-     ****** or if rank is 0, it will be used *********************************/
-    // int rank;
 };
 
 class IntList {
