@@ -17,7 +17,8 @@ public:
     void leftInsert(int );
     void rightInsert(int );
     void insert(int, int );
-    void deleteNode(int, int );
+    void deleteNode(int );
+    int size();
 };
 
 IntList::IntList(int number) {
@@ -44,10 +45,8 @@ void IntList::leftInsert(int number) {
     int current_rank = 0;
     Int *ptr;
 
-    for (ptr = head; ptr->right != 0; ptr = ptr->right) {
-        ptr->rank = current_rank;
-        current_rank += 1;
-    }
+    for (ptr = head; ptr->right != 0; ptr = ptr->right)
+        ptr->rank = current_rank++;
     ptr->rank = current_rank;
 }
 
@@ -69,9 +68,8 @@ void IntList::insert(int number, int rank) {
     newInt->value = number;
 
     Int *ptr;
-    for (ptr = head; ptr->right != 0; ptr = ptr->right)
-        if (ptr->rank == rank)
-            break;
+    for (ptr = head; ptr->rank != rank; ptr = ptr->right)
+        ;
     newInt->rank = ptr->rank + 1;
     newInt->left = ptr;
     newInt->right = ptr->right;
@@ -82,6 +80,34 @@ void IntList::insert(int number, int rank) {
     (ptr->rank)++;
 }
 
+void IntList::deleteNode(int rank) {
+    Int *ptr;
+    for (ptr = head; ptr->right != 0, ptr->rank != rank; ptr = ptr->right)
+        ;
+    if (ptr->rank == rank && ptr->right != 0) {
+        (ptr->left)->right = ptr->right;
+        (ptr->right)->left = ptr->left;
+        delete ptr;
+
+        int current_rank = 0;
+        for (ptr = head; ptr->right != 0; ptr = ptr->right)
+            ptr->rank = current_rank++;
+        ptr->rank = current_rank;
+    }
+    else {
+        (ptr->left)->right = 0;
+        delete ptr;
+    }
+}
+
+int IntList::size() {
+    Int *ptr;
+    for (ptr = head; ptr->right != 0; ptr = ptr->right)
+        ;
+    int size = ptr->rank + 1;
+    return size;
+}
+
 int main()
 {
     IntList newlist(3);
@@ -89,6 +115,11 @@ int main()
     newlist.rightInsert(72);
     newlist.leftInsert(-3);
     newlist.insert(28, 2);
+    newlist.deleteNode(2);
+    newlist.deleteNode(3);
+    newlist.deleteNode(2);
+    newlist.rightInsert(108);
     newlist.test();
+    cout << "the list's size is now " << newlist.size() << endl;
     return 0;
 }
