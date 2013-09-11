@@ -68,13 +68,21 @@ void IntList::insert(int number, int rank) {
     newInt->value = number;
 
     Int *ptr;
-    for (ptr = head; ptr->rank != rank; ptr = ptr->right)
+    /******************************************************************************
+     ******** must use && rather than , *******************************************
+     ******** ptr->right != 0, ptr->rank != rank === ptr->rank != rank ************
+     ******** the left part is ignored!!! *****************************************
+     ******************************************************************************/
+    for (ptr = head; ptr->right != 0 && ptr->rank != rank; ptr = ptr->right)
         ;
     newInt->rank = ptr->rank + 1;
     newInt->left = ptr;
     newInt->right = ptr->right;
-    (ptr->right)->left = newInt;
+    if (ptr->right != 0)
+        (ptr->right)->left = newInt;
     ptr->right = newInt;
+    if (newInt->right == 0)
+        return;
     for (ptr = newInt->right; ptr->right != 0; ptr = ptr->right)
         (ptr->rank)++;
     (ptr->rank)++;
@@ -82,7 +90,7 @@ void IntList::insert(int number, int rank) {
 
 void IntList::deleteNode(int rank) {
     Int *ptr;
-    for (ptr = head; ptr->right != 0, ptr->rank != rank; ptr = ptr->right)
+    for (ptr = head; ptr->right != 0 && ptr->rank != rank; ptr = ptr->right)
         ;
     if (ptr->rank == rank && ptr->right != 0) {
         (ptr->left)->right = ptr->right;
@@ -119,6 +127,9 @@ int main()
     newlist.deleteNode(3);
     newlist.deleteNode(2);
     newlist.rightInsert(108);
+    newlist.insert(12, 12);
+    newlist.insert(31, 7);
+    newlist.deleteNode(9);
     newlist.test();
     cout << "the list's size is now " << newlist.size() << endl;
     return 0;
