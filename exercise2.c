@@ -38,9 +38,9 @@ int main()
             }
             for ( ; ; ) {
                 if (fscanf(file, "%s", name) == EOF)
-                    exit(0);
+                    break;
                 if (fscanf(file, "%d", &number) == EOF)
-                    exit(0);
+                    break;
 
                 info *ptr;
                 ptr = (info *)malloc(sizeof(info));
@@ -68,18 +68,39 @@ int main()
                 ;
             iter->next = ptr;
         }
-        else if (strcmp(command, "-save" == 0) {
+        else if (strcmp(command, "-save") == 0) {
             char outfilename[40];
             FILE *outfile;
 
             scanf("%s", outfilename);
-            if (fopen(outfile, "w") == NULL) {
+            if ((outfile = fopen(outfilename, "w")) == NULL) {
                 perror("open outfile orror");
                 exit(0);
             }
 
-            
-        })
+            info *iter;
+            for (iter = head->next; iter->next != 0; iter = iter->next) {
+                fprintf(outfile, "%s ", iter->name);
+                fprintf(outfile, "%d\n", iter->number);
+            }
+            fprintf(outfile, "%s ", iter->name);
+            fprintf(outfile, "%d\n", iter->number);
+        }
+        else if (strcmp(command, "-delete") == 0) {
+            int number;
+
+            scanf("%d", &number);
+
+            info *iter;
+            for (iter = head; iter->next != 0; iter = iter->next) {
+                if ((iter->next)->number == number) {
+                    info *tempinfo = iter->next;
+                    iter->next = (iter->next->next);
+                    free(tempinfo);
+                    break;
+                }
+            }
+        }
         else
             exit(0);
     }
