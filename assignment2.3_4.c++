@@ -19,6 +19,7 @@ public:
     void insert(int, int );
     void deleteNode(int );
     int size();
+    int show(int );
 };
 
 IntList::IntList(int number) {
@@ -68,11 +69,6 @@ void IntList::insert(int number, int rank) {
     newInt->value = number;
 
     Int *ptr;
-    /******************************************************************************
-     ******** must use && rather than , *******************************************
-     ******** ptr->right != 0, ptr->rank != rank === ptr->rank != rank ************
-     ******** the left part is ignored!!! *****************************************
-     ******************************************************************************/
     for (ptr = head; ptr->right != 0 && ptr->rank != rank; ptr = ptr->right)
         ;
     newInt->rank = ptr->rank + 1;
@@ -116,6 +112,32 @@ int IntList::size() {
     return size;
 }
 
+int IntList::show(int rank) {
+    Int *ptr;
+    for (ptr = head; ptr->right != 0 && ptr->rank != rank; ptr = ptr->right)
+        ;
+    if (ptr->rank = rank)
+        return ptr->value;
+    else
+        return 0;
+}
+
+class Stack: public IntList {
+public:
+    Stack(int number) : IntList(number) {}
+
+    void push(int number) {
+        rightInsert(number);
+    }
+
+    int pop() {
+        int _size = size();
+        int popout = show(_size - 1);
+        deleteNode(_size - 1);
+        return popout;
+    }
+};
+
 int main()
 {
     IntList newlist(3);
@@ -132,5 +154,12 @@ int main()
     newlist.deleteNode(9);
     newlist.test();
     cout << "the list's size is now " << newlist.size() << endl;
+    cout << endl;
+    Stack newstack(8);
+    newstack.push(4);
+    newstack.push(82);
+    int popout = newstack.pop();
+    cout << "stack: pop " << popout << endl;
+    cout << "the stack's size is now " << newstack.size() << endl;
     return 0;
 }
