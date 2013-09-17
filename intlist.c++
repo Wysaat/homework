@@ -88,7 +88,12 @@ void IntList::deleteNode(int rank) {
     Int *ptr;
     for (ptr = head; ptr->right != 0 && ptr->rank != rank; ptr = ptr->right)
         ;
-    if (ptr->rank == rank && ptr->right != 0) {
+    if (ptr == head) {
+        ptr = head->right;
+        delete head;
+        head = ptr;
+    }
+    else if (ptr->rank == rank && ptr->right != 0) {
         (ptr->left)->right = ptr->right;
         (ptr->right)->left = ptr->left;
         delete ptr;
@@ -120,46 +125,4 @@ int IntList::show(int rank) {
         return ptr->value;
     else
         return 0;
-}
-
-class Stack: public IntList {
-public:
-    Stack(int number) : IntList(number) {}
-
-    void push(int number) {
-        rightInsert(number);
-    }
-
-    int pop() {
-        int _size = size();
-        int popout = show(_size - 1);
-        deleteNode(_size - 1);
-        return popout;
-    }
-};
-
-int main()
-{
-    IntList newlist(3);
-    newlist.leftInsert(88);
-    newlist.rightInsert(72);
-    newlist.leftInsert(-3);
-    newlist.insert(28, 2);
-    newlist.deleteNode(2);
-    newlist.deleteNode(3);
-    newlist.deleteNode(2);
-    newlist.rightInsert(108);
-    newlist.insert(12, 12);
-    newlist.insert(31, 7);
-    newlist.deleteNode(9);
-    newlist.test();
-    cout << "the list's size is now " << newlist.size() << endl;
-    cout << endl;
-    Stack newstack(8);
-    newstack.push(4);
-    newstack.push(82);
-    int popout = newstack.pop();
-    cout << "stack: pop " << popout << endl;
-    cout << "the stack's size is now " << newstack.size() << endl;
-    return 0;
 }
