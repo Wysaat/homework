@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 using namespace std;
@@ -7,10 +8,34 @@ class String {
     char *body;
 public:
     String(char *content) {
+        init(content);
+    }
+
+    String(int number) {
+        char content[50];
+        sprintf(content, "%d", number);
+        init(content);
+    }
+
+    String(float number) {
+        char content[50];
+        sprintf(content, "%f", number);
+        init(content);
+    }
+
+    String(double number) {
+        char content[50];
+        sprintf(content, "%f", number);
+        init(content);
+    }
+
+    void init(char *content) {
         int size = strlen(content);
         body = new char[size+1];
         strcpy(body, content);
+        cout << "constructing a String object" << endl;
     }
+
     bool hasOne(char *another) {
         for (int i = 0; *(body + i) != 0; i++) {
             for (int j = 0; ; j++) {
@@ -22,9 +47,11 @@ public:
         }
         return false;
     }
+
     char *content() {
         return body;
     }
+
     bool hasOne(String another) {
         return String::hasOne(another.content());
     }
@@ -47,5 +74,14 @@ int main()
     String carl("to");
     cout << carl.content() << endl;
     cout << tom.hasOne(carl) << endl;
+    String *raz = new String("raz");
+    String kilo(1024);
+    String two(2);
+    cout << kilo.content() << endl;
+    cout << kilo.hasOne(two) << endl;
+    String three(3);
+    cout << kilo.hasOne(two) << " " << kilo.hasOne(three) << endl;
+    String pie(3.14);
+    cout << pie.content() << endl;
     return 0;
 }
