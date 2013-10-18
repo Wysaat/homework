@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <iostream>
+#include <string>
 
 class Singleton {
     int number;
@@ -33,6 +34,9 @@ public:
     int getHour() { return hour; }
     int getMinute() { return minute; }
     int getSecond() { return second; }
+    void setHour(int hour) { this->hour = hour; }
+    void setMinute(int minute) { this->minute = minute; }
+    void setSecond(int second) { this->second = second; }
     void show() {
         printf("%d: %d: %d\n", getHour(), getMinute(), getSecond());
     }
@@ -100,7 +104,7 @@ public:
         *this = *this - subber;
         return tmp;
     }
-    friend std::istream& operator>>(std::istream&, Time);
+    // friend std::istream& operator>>(std::istream&, Time);
 };
 
 std::ostream& operator<<(std::ostream &out, Time t) {
@@ -111,7 +115,11 @@ std::ostream& operator<<(std::ostream &out, Time t) {
 }
 
 std::istream& operator>>(std::istream& in, Time t) {
-    in >> t.hour >> t.minute >> t.second;
+    std::string hour, minute, second;
+    in >> hour >> minute >> second;
+    t.setHour(atoi(hour.c_str()));
+    t.setMinute(atoi(minute.c_str()));
+    t.setSecond(atoi(second.c_str()));
     return in;
 }
 
